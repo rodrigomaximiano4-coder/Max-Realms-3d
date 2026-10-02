@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#03060a">
+<title>MAX REALMS • TESTE 12 • WORLD + SYSTEMS</title>
+<style>
+*{box-sizing:border-box}
+:root{--gold:#f4c56a;--gold2:#ad6c19;--ink:#03060a;--glass:rgba(5,10,16,.95);--line:#ffffff18;--muted:#9fb0bc}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#03060a;color:#f7f2e8;font-family:Inter,Segoe UI,Arial,sans-serif;touch-action:none}
+button,input,select{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.top{height:50px;display:flex;align-items:center;gap:10px;padding:0 12px;background:#050a10;border-bottom:1px solid #ffffff10;position:relative;z-index:100}
+.brand{font-weight:950;letter-spacing:.13em}.brand b{color:var(--gold)}.brand small{font-size:8px;color:#8296a6;margin-left:6px}.meta{margin-left:auto;display:flex;gap:12px;font-size:10px;color:#93a5b3}
+.circle{width:36px;height:36px;border-radius:50%;background:#10202d;color:#fff;border:1px solid #ffffff18;font-weight:900}
+.screen{height:calc(100vh - 50px);position:relative;overflow:hidden}.host{position:absolute;inset:0}.host canvas{display:block;width:100%;height:100%}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,#02060df2 0%,#02060d00 44%),radial-gradient(circle at 50% 43%,transparent 28%,#03060a8c 100%)}
+.menu{position:absolute;z-index:10;left:4vw;top:5vh;width:min(520px,92vw);max-height:86vh;overflow:auto;padding:20px;border-radius:20px;background:linear-gradient(180deg,rgba(5,9,14,.95),rgba(4,7,11,.90));border:1px solid #ffffff14;box-shadow:0 24px 80px #000c}
+.eyebrow{font-size:9px;letter-spacing:.23em;color:var(--gold);font-weight:950}.menu h1{font-size:clamp(48px,7vw,78px);line-height:.84;margin:10px 0 12px;letter-spacing:-.055em;text-shadow:0 14px 55px #000}.menu h1 em{font-style:normal;color:var(--gold)}
+.menu p{color:#c2cbd2;line-height:1.45;font-size:12px;margin:0 0 12px}.walletStrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}.walletStrip div{background:#ffffff08;border:1px solid var(--line);padding:8px;border-radius:10px;text-align:center}.walletStrip small{display:block;color:#8195a4;font-size:7px;font-weight:900;letter-spacing:.1em}.walletStrip b{display:block;margin-top:3px;color:#ffe5aa;font-size:13px}
+.menuGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.primary,.secondary,.menuBtn{padding:11px 12px;border-radius:12px;font-weight:950;transition:.15s}.primary{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#161006}.secondary,.menuBtn{background:#0e1c29;color:#fff;border:1px solid #ffffff1b}.menuBtn{text-align:left;font-size:11px}.menuBtn:hover{background:#132637}.menuBtn strong{display:block}.menuBtn small{display:block;color:#8fa3b2;font-size:8px;margin-top:2px}.wide{grid-column:1/-1}.primary:active,.secondary:active,.menuBtn:active{transform:scale(.98)}
+.hudWrap{position:absolute;z-index:30;left:6px;right:52px;top:6px;background:linear-gradient(180deg,rgba(5,9,14,.96),rgba(2,5,9,.94));border:1px solid #ffffff12;border-radius:12px;padding:5px 6px 6px;box-shadow:0 8px 24px #0007}.hud{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.hud>div{min-width:0;background:#ffffff08;border:1px solid #ffffff0a;border-radius:8px;padding:4px 2px;text-align:center}.hud small{display:block;font-size:6px;color:#91a5b4;letter-spacing:.07em;font-weight:900}.hud b{display:block;margin-top:2px;font-size:9px;color:#ffe5aa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.routeRow{display:flex;justify-content:space-between;gap:8px;margin:5px 1px 3px;font-size:7px;color:#91a5b4;font-weight:900;letter-spacing:.08em}.routeRow b{color:#fff0c8;font-size:9px}.trackbar{height:4px;border-radius:999px;background:#0008;border:1px solid #ffffff10;overflow:hidden}.trackbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#6d5ed6,#65b7ff 55%,#f2c96c)}
+.pause{position:absolute;z-index:31;right:6px;top:6px;width:40px;height:40px;border-radius:12px;background:linear-gradient(180deg,#131b24,#080d13);color:#f3d182;border:1px solid #f4c56a44;font-size:18px;font-weight:950}
+.toast{position:absolute;z-index:80;left:50%;top:70px;transform:translateX(-50%);background:#050a10ef;border:1px solid #ffffff16;border-radius:999px;padding:8px 13px;font-size:9px;font-weight:900;letter-spacing:.04em;opacity:0;transition:.18s;pointer-events:none;white-space:nowrap}.toast.show{opacity:1}
+.mobileHelp,.desktopHelp{position:absolute;z-index:22;left:50%;bottom:10px;transform:translateX(-50%);padding:6px 9px;border-radius:999px;background:#04080dcc;border:1px solid #ffffff12;color:#aab7c0;font-size:8px;font-weight:900;letter-spacing:.07em;pointer-events:none}
+.overlay{position:absolute;inset:0;z-index:60;display:none;place-items:center;background:#020509df;padding:14px}.overlay.show{display:grid}.modal{width:min(430px,94vw);max-height:88vh;overflow:auto;padding:18px;border-radius:18px;background:#071019;border:1px solid #ffffff18;box-shadow:0 24px 70px #000c}.modal.large{width:min(820px,96vw)}.modal h2{margin:0 0 5px;color:#f4d58c}.modal .sub{margin:0 0 14px;color:#93a7b5;font-size:10px}.modal p{color:#aebcc6;font-size:12px;line-height:1.5}.modal .primary,.modal>.secondary{width:100%;margin-top:8px}
+.closeX{float:right;background:#101b24;color:#fff;border:1px solid var(--line);width:34px;height:34px;border-radius:10px;font-weight:900}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.card{background:#ffffff08;border:1px solid var(--line);border-radius:13px;padding:12px}.card .lvl{font-size:8px;color:#f1ca71;font-weight:950;letter-spacing:.12em}.card h3{margin:5px 0 6px;font-size:13px}.card p{font-size:10px;margin:0;color:#9fb0bc}.maxTag{display:inline-block;margin-top:8px;padding:4px 7px;border-radius:999px;background:#5c4218;color:#ffe3a1;font-size:8px;font-weight:950}
+.field{display:grid;gap:5px;margin:10px 0}.field label{font-size:8px;font-weight:900;color:#8fa2b0;letter-spacing:.1em}.field input,.field select{width:100%;padding:11px;border-radius:10px;border:1px solid #ffffff18;background:#07141f;color:#fff;outline:none}.idBox{word-break:break-all;background:#040a10;border:1px dashed #ffffff22;padding:10px;border-radius:10px;color:#e7d9bb;font:600 11px ui-monospace,monospace}
+.localBadge{display:inline-block;margin:6px 0;padding:5px 8px;border-radius:999px;background:#0e2a1e;border:1px solid #4ba46b55;color:#80df9c;font-size:8px;font-weight:900}
+.shopHead{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#ffffff07;border:1px solid var(--line);padding:10px;border-radius:12px;margin:8px 0}.shopHead strong{color:#ffe09a}.tabs{display:flex;gap:5px;overflow:auto;margin:8px 0}.tab{padding:7px 9px;border-radius:999px;background:#0b1924;color:#a8bac7;border:1px solid #ffffff12;font-size:9px;font-weight:900;white-space:nowrap}.tab.active{background:#654717;color:#fff1c7;border-color:#f4c56a55}
+.shopGrid,.inventoryGrid,.rankList{display:grid;gap:7px}.shopItem,.invItem,.rankRow{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:#ffffff07;border:1px solid var(--line);padding:10px;border-radius:12px}.shopItem b,.invItem b{font-size:11px}.shopItem small,.invItem small{display:block;color:#8fa3b2;font-size:8px;margin-top:3px}.price{color:#7ce8ff;font-size:10px;font-weight:950}.action{padding:7px 9px;border-radius:9px;background:#173044;color:#fff;border:1px solid #ffffff16;font-size:8px;font-weight:950}.action.equipped{background:#234827;color:#bff6c9}.packageTitle{margin:16px 0 7px;color:#f3d483;font-size:11px}
+.resultStats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.resultStats div{padding:10px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff0d}.resultStats small{display:block;font-size:8px;color:#91a5b4}.resultStats b{display:block;margin-top:4px;color:#ffe5aa;font-size:17px}
+.rankRow{grid-template-columns:38px 1fr auto}.rankPos{font-size:16px;font-weight:950;color:#f3cc76}.rankRow small{display:block;color:#8193a0;font-size:8px}.storyFrame{height:210px;border-radius:14px;border:1px solid #ffffff18;background:radial-gradient(circle at 50% 30%,#6b4a2533,transparent 35%),linear-gradient(180deg,#172635,#05090d);display:grid;place-items:center;text-align:center;padding:20px;color:#dccda8}.storyFrame b{font-size:28px}.settingRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #ffffff0e}.switch{padding:6px 9px;border-radius:9px;background:#173044;color:#fff;font-size:9px;font-weight:900}
+#shelterPrompt{position:absolute;z-index:42;left:50%;bottom:48px;transform:translateX(-50%);display:none;width:min(380px,90vw);background:#061018ef;border:1px solid #f4c56a55;border-radius:14px;padding:10px;box-shadow:0 16px 40px #000a;text-align:center}#shelterPrompt.show{display:block}#shelterPrompt b{color:#f4d58c}#shelterPrompt small{display:block;color:#9fb0bc;margin:4px 0 8px}.promptBtns{display:flex;gap:6px}.promptBtns button{flex:1;padding:8px;border-radius:9px;font-size:9px;font-weight:900}
+.shelterTimer{font-size:42px;color:#f4d58c;font-weight:950;text-align:center;margin:12px 0}
+@media(min-width:900px){.hudWrap{left:10px;right:auto;width:620px;top:10px;padding:7px 8px 8px}.hud small{font-size:7px}.hud b{font-size:11px}.pause{right:10px;top:10px;width:42px;height:42px}.mobileHelp{display:none}.desktopHelp{display:block}}
+@media(max-width:899px){.desktopHelp{display:none}}
+@media(max-width:640px){.top{height:44px;padding:0 8px}.brand{font-size:11px}.brand small,.meta{display:none}.screen{height:calc(100vh - 44px)}.circle{width:32px;height:32px}.menu{left:8px;right:8px;top:3vh;width:auto;padding:15px}.menu h1{font-size:45px}.menu p{font-size:10px}.cards{grid-template-columns:1fr}.hudWrap{right:48px}.hud b{font-size:8px}.modal{padding:14px}.shopItem,.invItem{grid-template-columns:1fr auto}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+<div class="top">
+  <div class="brand">MAX <b>REALMS</b><small>TESTE 12 • WORLD + SYSTEMS</small></div>
+  <div class="meta"><span>SISTEMAS PERSISTENTES</span><span>MOBILE-FIRST</span></div>
+  <button id="helpBtn" class="circle">?</button>
+</div>
+
+<section class="screen" id="gameScreen">
+  <div class="host"><canvas id="renderCanvas"></canvas></div>
+  <div class="shade"></div>
+
+  <div class="hudWrap">
+    <div class="hud">
+      <div><small>DISTÂNCIA</small><b id="distTxt">0 m</b></div>
+      <div><small>⭐ ESTRELAS</small><b id="starTxt">0</b></div>
+      <div><small>💎 CORRIDA</small><b id="coinTxt">0</b></div>
+      <div><small>PONTOS</small><b id="scoreTxt">0</b></div>
+      <div><small>❤ VIDAS</small><b id="lifeTxt">❤❤❤</b></div>
+    </div>
+    <div class="routeRow"><span id="shieldTxt">ESCUDO 0</span><b id="routeTxt">0,0 / 14,0 km</b></div>
+    <div class="trackbar"><i id="routeBar"></i></div>
+  </div>
+
+  <button id="pauseBtn" class="pause">Ⅱ</button>
+  <div id="toast" class="toast"></div>
+
+  <div class="menu" id="menuPanel">
+    <div class="eyebrow">MAX REALMS • TESTE DE SISTEMAS</div>
+    <h1>MAX <em>REALMS</em></h1>
+    <p>Corrida 3D + progressão persistente. Nesta build o foco é validar estrelas, ranking, abrigo, perfil, upgrades, loja e inventário.</p>
+    <div class="walletStrip">
+      <div><small>CARTEIRA</small><b id="menuWallet">💎 0</b></div>
+      <div><small>ESTRELAS</small><b id="menuStars">⭐ 0</b></div>
+      <div><small>XP</small><b id="menuXp">0 XP</b></div>
+    </div>
+    <div class="menuGrid">
+      <button class="primary wide" id="startBtn">▶ INICIAR JORNADA</button>
+      <button class="menuBtn" data-open="storyOverlay"><strong>🎬 HISTÓRIA</strong><small>Conheça a fuga de Varek</small></button>
+      <button class="menuBtn" data-open="upgradesOverlay"><strong>⬆ UPGRADES</strong><small>Escudo, ímã e XP</small></button>
+      <button class="menuBtn" data-open="profileOverlay"><strong>👤 PERFIL</strong><small>Nome, país e ID único</small></button>
+      <button class="menuBtn" data-open="shopOverlay"><strong>🛒 LOJA MR</strong><small>Use seus diamantes</small></button>
+      <button class="menuBtn" data-open="inventoryOverlay"><strong>🎒 ITENS</strong><small>Usar e equipar</small></button>
+      <button class="menuBtn" data-open="rankOverlay"><strong>🏆 RANKING</strong><small>Distância + estrelas</small></button>
+      <button class="menuBtn wide" data-open="settingsOverlay"><strong>⚙ CONFIGURAÇÕES</strong><small>Som, desempenho e controles</small></button>
+    </div>
+  </div>
+
+  <div class="mobileHelp">1 SWIPE = 1 AÇÃO • ← → • ↑ PULAR • ↓ ROLAR</div>
+  <div class="desktopHelp">PC: ← → • ↑/ESPAÇO PULAR • ↓ ROLAR</div>
+
+  <div id="shelterPrompt">
+    <b>🏕 ABRIGO À FRENTE</b>
+    <small>Proteção temporária • custo 💎100 • penalidade +1 min</small>
+    <div class="promptBtns"><button class="primary" id="enterShelterBtn">ENTRAR NO ABRIGO</button><button class="secondary" id="ignoreShelterBtn">PASSAR</button></div>
+  </div>
+
+  <div id="pauseOverlay" class="overlay"><div class="modal">
+    <h2>PAUSADO</h2><p>A corrida permanece exatamente no mesmo ponto.</p>
+    <button id="resumeBtn" class="primary">CONTINUAR</button><button id="restartBtn" class="secondary">REINICIAR</button><button id="menuBtnPause" class="secondary">VOLTAR AO MENU</button>
+  </div></div>
+
+  <div id="helpOverlay" class="overlay"><div class="modal">
+    <button class="closeX" data-close="helpOverlay">✕</button><h2>CONTROLES</h2>
+    <p><b>Celular:</b> um swipe para esquerda/direita troca exatamente uma faixa; cima pula; baixo executa um roll.<br><br><b>PC:</b> setas ← →, ↑/espaço e ↓.</p>
+  </div></div>
+
+  <div id="storyOverlay" class="overlay"><div class="modal large">
+    <button class="closeX" data-close="storyOverlay">✕</button><h2>🎬 HISTÓRIA</h2><p class="sub">Estrutura preparada para o vídeo definitivo.</p>
+    <div class="storyFrame"><div><b>MAX REALMS</b><br><br>Varek atravessa reinos em colapso tentando alcançar a fronteira segura. O que começa como uma fuga se transforma em uma perseguição pessoal — e a jornada de sua família ainda está apenas começando.</div></div>
+    <button id="storyPreviewBtn" class="primary">▶ REPRODUZIR PRÉVIA TEXTUAL</button>
+  </div></div>
+
+  <div id="upgradesOverlay" class="overlay"><div class="modal large">
+    <button class="closeX" data-close="upgradesOverlay">✕</button><h2>⬆ UPGRADES</h2><p class="sub">Ativos nesta versão de teste.</p>
+    <div class="cards">
+      <div class="card"><div class="lvl">NÍVEL 3/3</div><h3>Escudo Inicial</h3><p>Protege Varek dos primeiros impactos da corrida.</p><span class="maxTag">MAX</span></div>
+      <div class="card"><div class="lvl">NÍVEL 3/3</div><h3>Ímã de Diamantes</h3><p>Aumenta a distância em que diamantes são coletados.</p><span class="maxTag">MAX</span></div>
+      <div class="card"><div class="lvl">NÍVEL 3/3</div><h3>Bônus de XP</h3><p>Aumenta o XP concedido no fim da corrida.</p><span class="maxTag">MAX</span></div>
+    </div>
+  </div></div>
+
+  <div id="profileOverlay" class="overlay"><div class="modal">
+    <button class="closeX" data-close="profileOverlay">✕</button><h2>👤 Conta do jogador</h2>
+    <p class="sub">Nome, país e ID único identificam seus recordes e, futuramente, suas compras de diamantes.</p>
+    <div class="field"><label>NOME DO JOGADOR</label><input id="profileName" maxlength="28" placeholder="Seu nome"></div>
+    <div class="field"><label>PAÍS</label><input id="profileCountry" maxlength="28" placeholder="Brasil"></div>
+    <div class="field"><label>ID ÚNICO DO JOGADOR</label><div class="idBox" id="profileId"></div></div>
+    <span class="localBadge">● LOCAL</span>
+    <p>Modo local: seu ID está salvo neste dispositivo. Backend e sincronização online ficam para a etapa de publicação.</p>
+    <button id="saveProfileBtn" class="primary">SALVAR PERFIL</button>
+    <button class="secondary" id="loginFutureBtn">🔐 LOGIN E RECUPERAÇÃO</button>
+    <button class="secondary" id="syncFutureBtn">↻ SINCRONIZAR CONTA</button>
+  </div></div>
+
+  <div id="shopOverlay" class="overlay"><div class="modal large">
+    <button class="closeX" data-close="shopOverlay">✕</button><h2>MAX REALMS • LOJA MR</h2><p class="sub">Use seus 💎 conquistados • sem pagamentos reais nesta versão</p>
+    <div class="shopHead"><div><small>SALDO PARA COMPRAS</small><br><strong id="shopWallet">💎 0</strong></div><div style="text-align:right"><small>Carteira persistente</small><br><span id="shopStatus" style="font-size:9px;color:#9fb0bc"></span></div></div>
+    <div class="tabs" id="shopTabs"></div><div class="shopGrid" id="shopGrid"></div>
+    <div class="packageTitle">📦 PACOTES PARA TESTAR COM DIAMANTES</div><div class="shopGrid" id="packageGrid"></div>
+  </div></div>
+
+  <div id="inventoryOverlay" class="overlay"><div class="modal large">
+    <button class="closeX" data-close="inventoryOverlay">✕</button><h2>🎒 ITENS</h2><p class="sub">Tudo que foi comprado aparece aqui. Cosméticos podem ser equipados; consumíveis podem ser usados.</p>
+    <div class="inventoryGrid" id="inventoryGrid"></div>
+  </div></div>
+
+  <div id="rankOverlay" class="overlay"><div class="modal large">
+    <button class="closeX" data-close="rankOverlay">✕</button><h2>🏆 RANKING LOCAL</h2><p class="sub">Pontuação = distância percorrida + 25 pontos por estrela. Tempo aparece como desempate.</p>
+    <div class="rankList" id="rankList"></div>
+  </div></div>
+
+  <div id="settingsOverlay" class="overlay"><div class="modal">
+    <button class="closeX" data-close="settingsOverlay">✕</button><h2>⚙ CONFIGURAÇÕES</h2>
+    <div class="settingRow"><span>Som</span><button class="switch" id="soundToggle">LIGADO</button></div>
+    <div class="settingRow"><span>Efeitos reduzidos</span><button class="switch" id="effectsToggle">DESLIGADO</button></div>
+    <div class="settingRow"><span>Controles mobile</span><b style="font-size:9px;color:#f4d58c">1 GESTO = 1 AÇÃO</b></div>
+  </div></div>
+
+  <div id="shelterOverlay" class="overlay"><div class="modal">
+    <h2>🏕 ABRIGO</h2><p>Varek está temporariamente protegido. A perseguição foi interrompida.</p>
+    <div class="shelterTimer" id="shelterTimerTxt">30</div>
+    <p>Penalidade aplicada ao tempo final: <b>+1 minuto</b>.</p>
+    <button id="leaveShelterBtn" class="primary">SAIR DO ABRIGO</button>
+  </div></div>
+
+  <div id="resultOverlay" class="overlay"><div class="modal">
+    <h2 id="resultTitle">FIM DA FUGA</h2>
+    <div class="resultStats">
+      <div><small>DISTÂNCIA</small><b id="resultDist">0 m</b></div>
+      <div><small>ESTRELAS</small><b id="resultStars">0</b></div>
+      <div><small>PONTOS</small><b id="resultScore">0</b></div>
+      <div><small>TEMPO</small><b id="resultTime">0:00</b></div>
+      <div><small>DIAMANTES</small><b id="resultCoins">0</b></div>
+      <div><small>XP GANHO</small><b id="resultXp">0</b></div>
+    </div>
+    <button id="playAgainBtn" class="primary">JOGAR NOVAMENTE</button><button id="resultMenuBtn" class="secondary">VOLTAR AO MENU</button>
+  </div></div>
+</section>
+
+<script>
+(()=>{
+if(!window.THREE){document.body.innerHTML='<div style="min-height:100vh;display:grid;place-items:center;background:#03060a;color:#fff;font:700 16px system-ui;padding:24px;text-align:center">MAX REALMS não conseguiu carregar o motor 3D.<br><br>Verifique sua internet e recarregue a página.</div>';return}
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const mobile=matchMedia('(max-width:900px)').matches||/Android|iPhone|iPad/i.test(navigator.userAgent);
+const KEY='maxRealmsTeste12';
+const uuid=()=>crypto.randomUUID?crypto.randomUUID():'mr-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+const defaults={wallet:45229,starsBank:0,xp:0,profile:{name:'',country:'Brasil',id:uuid()},upgrades:{shield:3,magnet:3,xp:3},owned:['cap-green'],equipped:{cap:'cap-green',shirt:null,trail:null,boots:null,backpack:null},consumables:{shield:0,magnetMin:0,canteen:0},settings:{sound:true,reduced:false},records:[]};
+function loadState(){try{const x=JSON.parse(localStorage.getItem(KEY)||'{}');return {...defaults,...x,profile:{...defaults.profile,...(x.profile||{})},upgrades:{...defaults.upgrades,...(x.upgrades||{})},equipped:{...defaults.equipped,...(x.equipped||{})},consumables:{...defaults.consumables,...(x.consumables||{})},settings:{...defaults.settings,...(x.settings||{})},records:Array.isArray(x.records)?x.records:[]}}catch(e){return structuredClone(defaults)}}
+let state=loadState(); const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+const fmt=n=>Math.floor(n).toLocaleString('pt-BR'); const fmtTime=s=>{s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+
+const shopItems=[
+{id:'cap-red',cat:'caps',name:'🧢 Boné Vermelho MR',price:260,type:'cap',color:0xb3261e},{id:'cap-yellow',cat:'caps',name:'🧢 Boné Amarelo MR',price:260,type:'cap',color:0xe0b72c},{id:'cap-blue',cat:'caps',name:'🧢 Boné Azul MR',price:260,type:'cap',color:0x2879c7},{id:'cap-purple',cat:'caps',name:'🧢 Boné Roxo MR',price:260,type:'cap',color:0x7241a7},{id:'cap-black',cat:'caps',name:'🧢 Boné Preto MR',price:260,type:'cap',color:0x18191b},{id:'cap-white',cat:'caps',name:'🧢 Boné Branco MR',price:260,type:'cap',color:0xe9e9e4},{id:'cap-green',cat:'caps',name:'🧢 Boné Verde MR',price:260,type:'cap',color:0x2e8a4b},{id:'cap-orange',cat:'caps',name:'🧢 Boné Laranja MR',price:260,type:'cap',color:0xd76c20},{id:'cap-gray',cat:'caps',name:'🧢 Boné Cinza MR',price:260,type:'cap',color:0x666c71},
+{id:'shirt-ember',cat:'shirts',name:'👕 Camiseta Brasa',price:520,type:'shirt',color:0xa8422b},{id:'shirt-forest',cat:'shirts',name:'👕 Camiseta Floresta',price:520,type:'shirt',color:0x315f3a},{id:'shirt-guardian',cat:'shirts',name:'👕 Camiseta Guardião',price:650,type:'shirt',color:0x435b74},
+{id:'trail-ember',cat:'trails',name:'🔥 Rastro de Brasas',price:900,type:'trail',color:0xff6b22},{id:'trail-leaf',cat:'trails',name:'🍃 Rastro de Folhas',price:900,type:'trail',color:0x63b84d},
+{id:'boots-dark',cat:'boots',name:'🥾 Botas Sombrias',price:680,type:'boots',color:0x2a2522},{id:'boots-sand',cat:'boots',name:'🥾 Botas do Caminho',price:680,type:'boots',color:0x765033},
+{id:'pack-canvas',cat:'packs',name:'🎒 Mochila Canvas',price:740,type:'backpack',color:0x6d563b},{id:'pack-guard',cat:'packs',name:'🎒 Mochila Guardião',price:820,type:'backpack',color:0x3e5661}
+];
+const packages=[
+{id:'pkg-survive',name:'Kit Sobrevivência',price:1200,desc:'3 escudos + 15 min de ímã + 3 cantis.',apply(){state.consumables.shield+=3;state.consumables.magnetMin+=15;state.consumables.canteen+=3}},
+{id:'pkg-brasa',name:'Varek — Brasa',price:1800,desc:'Roupa Brasa para Varek, liberada e equipada na hora.',apply(){unlockAndEquip('shirt-ember')}},
+{id:'pkg-guard',name:'Varek — Guardião',price:1800,desc:'Roupa Guardião para Varek, liberada e equipada na hora.',apply(){unlockAndEquip('shirt-guardian')}},
+{id:'pkg-trail-ember',name:'Rastro de Brasas',price:900,desc:'Rastro de brasas visível durante a corrida.',apply(){unlockAndEquip('trail-ember')}},
+{id:'pkg-trail-leaf',name:'Rastro de Folhas',price:900,desc:'Rastro de folhas visível durante a corrida.',apply(){unlockAndEquip('trail-leaf')}},
+{id:'pkg-founder',name:'Pacote Fundador',price:4500,desc:'Roupa Fundador + 5 escudos + 30 min de ímã + 5 cantis.',apply(){state.consumables.shield+=5;state.consumables.magnetMin+=30;state.consumables.canteen+=5;if(!state.owned.includes('shirt-guardian'))state.owned.push('shirt-guardian');state.equipped.shirt='shirt-guardian'}}
+];
+const catLabels={caps:'Bonés',shirts:'Camisetas',trails:'Rastros',boots:'Botas',packs:'Mochilas'};
+let activeCat='caps';
+
+const canvas=$('#renderCanvas'),scene=new THREE.Scene();scene.background=new THREE.Color(0x071019);scene.fog=new THREE.FogExp2(0x071019,mobile?.045:.032);
+const camera=new THREE.PerspectiveCamera(mobile?65:61,1,.1,220);camera.position.set(0,mobile?3.65:4.15,mobile?7.7:9.0);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:!mobile,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,mobile?.8:1.4));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=false;
+scene.add(new THREE.HemisphereLight(0xa8bfd2,0x23321f,1.85));const sun=new THREE.DirectionalLight(0xffd49a,2.0);sun.position.set(5,12,6);scene.add(sun);
+const world=new THREE.Group();scene.add(world);const lanes=[-1.72,0,1.72];
+
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(34,190),new THREE.MeshStandardMaterial({color:0x243b27,roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.z=-70;world.add(ground);
+const road=new THREE.Mesh(new THREE.PlaneGeometry(5.65,190),new THREE.MeshStandardMaterial({color:0x87694b,roughness:.98}));road.rotation.x=-Math.PI/2;road.position.set(0,.012,-70);world.add(road);
+[-3,3].forEach(x=>{const e=new THREE.Mesh(new THREE.BoxGeometry(.15,.08,190),new THREE.MeshStandardMaterial({color:0x493020,roughness:1}));e.position.set(x,.04,-70);world.add(e)});
+const markers=[];for(let i=0;i<32;i++)[-.94,.94].forEach(x=>{const m=new THREE.Mesh(new THREE.BoxGeometry(.055,.02,1.05),new THREE.MeshBasicMaterial({color:0xe7cc8a}));m.position.set(x,.035,-i*6);world.add(m);markers.push(m)});
+
+const sideProps=[];
+const rockMat=new THREE.MeshStandardMaterial({color:0x34433a,roughness:1}),leafMat=new THREE.MeshStandardMaterial({color:0x214b2d,roughness:1}),trunkMat=new THREE.MeshStandardMaterial({color:0x4b3021,roughness:1});
+function addForestCluster(side,z,seed=1){
+ const g=new THREE.Group(),baseX=side*(5.2+(seed%4)*1.4);
+ for(let k=0;k<5;k++){const tr=new THREE.Mesh(new THREE.CylinderGeometry(.18,.30,4.5+(k%3)*1.1,7),trunkMat);tr.position.set(baseX+side*(k*.85),2.2+(k%3)*.45,(k-2)*1.3);g.add(tr);const crown=new THREE.Mesh(new THREE.IcosahedronGeometry(1.4+(k%2)*.35,1),leafMat);crown.scale.set(1.1,1.6,1.1);crown.position.set(tr.position.x,5.0+(k%3)*.7,tr.position.z);g.add(crown)}
+ for(let k=0;k<4;k++){const r=new THREE.Mesh(new THREE.DodecahedronGeometry(.7+(k%2)*.35,0),rockMat);r.scale.y=.6;r.position.set(baseX+side*(k*1.3),.45,(k-1.5)*1.8);g.add(r)}
+ g.position.z=z;world.add(g);sideProps.push(g)
+}
+for(let i=0;i<(mobile?18:28);i++){addForestCluster(-1,-i*9-4,i);addForestCluster(1,-i*9-8,i+3)}
+
+const M=c=>new THREE.MeshStandardMaterial({color:c,roughness:.72}), mesh=(g,c)=>new THREE.Mesh(g,M(c));
+function limb(w,h,d,c){const p=new THREE.Group(),m=mesh(new THREE.BoxGeometry(w,h,d),c);m.position.y=-h/2;p.add(m);return p}
+function createRunner(opts={}){
+ const g=new THREE.Group(),hip=new THREE.Group();hip.position.y=1.12;g.add(hip);
+ const torso=mesh(new THREE.BoxGeometry(.72,.84,.40),opts.torso||0x845034);torso.position.y=.43;hip.add(torso);
+ const chest=mesh(new THREE.BoxGeometry(.54,.20,.43),opts.accent||0xb76145);chest.position.y=.58;torso.add(chest);
+ const headPivot=new THREE.Group();headPivot.position.y=1.00;hip.add(headPivot);
+ const head=mesh(new THREE.BoxGeometry(.39,.43,.38),opts.skin||0xd7a474);head.position.y=.20;headPivot.add(head);
+ const hair=mesh(new THREE.BoxGeometry(.43,.13,.42),opts.hair||0x2a211d);hair.position.y=.43;headPivot.add(hair);
+ const armL=limb(.17,.72,.17,opts.skin||0xd7a474);armL.position.set(-.47,.77,0);hip.add(armL);const armR=limb(.17,.72,.17,opts.skin||0xd7a474);armR.position.set(.47,.77,0);hip.add(armR);
+ const legL=limb(.21,.82,.22,opts.legs||0x3f3835);legL.position.set(-.21,.04,0);hip.add(legL);const legR=limb(.21,.82,.22,opts.legs||0x3f3835);legR.position.set(.21,.04,0);hip.add(legR);
+ const footL=mesh(new THREE.BoxGeometry(.24,.16,.38),opts.boots||0x332a25);footL.position.set(-.21,-.78,.09);hip.add(footL);const footR=footL.clone();footR.position.x=.21;hip.add(footR);
+ const pack=mesh(new THREE.BoxGeometry(.48,.56,.22),opts.pack||0x69415c);pack.position.set(0,.42,.31);hip.add(pack);
+ g.userData={hip,headPivot,armL,armR,legL,legR,torso,pack,footL,footR,baseTorso:torso.material.color.getHex(),basePack:pack.material.color.getHex(),baseBoot:footL.material.color.getHex()};return g
+}
+const player=createRunner({torso:0x754532,accent:0xc65d42,pack:0x6a3d63});player.position.set(0,0,2.35);player.scale.setScalar(1.04);scene.add(player);
+const hunter=createRunner({torso:0x272837,accent:0x68405d,hair:0x17151a,legs:0x242431,pack:0x35263b});hunter.scale.setScalar(.89);hunter.rotation.y=Math.PI;hunter.position.set(0,0,5.15);hunter.visible=false;scene.add(hunter);
+
+const capGroup=new THREE.Group();const capTop=new THREE.Mesh(new THREE.CylinderGeometry(.24,.25,.13,16),new THREE.MeshStandardMaterial({color:0x2e8a4b}));capTop.position.y=.54;capGroup.add(capTop);const brim=new THREE.Mesh(new THREE.BoxGeometry(.32,.05,.20),capTop.material);brim.position.set(0,.50,-.18);capGroup.add(brim);player.userData.headPivot.add(capGroup);
+const trails=[];for(let i=0;i<10;i++){const q=new THREE.Mesh(new THREE.SphereGeometry(.05,6,6),new THREE.MeshBasicMaterial({color:0xff6b22,transparent:true,opacity:0}));scene.add(q);trails.push(q)}
+function itemById(id){return shopItems.find(x=>x.id===id)}
+function applyCosmetics(){
+ const e=state.equipped,u=player.userData;
+ const cap=itemById(e.cap);capGroup.visible=!!cap;if(cap)capGroup.children.forEach(x=>x.material.color.setHex(cap.color));
+ const shirt=itemById(e.shirt);u.torso.material.color.setHex(shirt?shirt.color:u.baseTorso);
+ const pack=itemById(e.backpack);u.pack.material.color.setHex(pack?pack.color:u.basePack);
+ const boots=itemById(e.boots);u.footL.material.color.setHex(boots?boots.color:u.baseBoot);u.footR.material.color.copy(u.footL.material.color);
+ const trail=itemById(e.trail);trails.forEach(q=>{q.material.color.setHex(trail?trail.color:0xffffff);q.material.opacity=trail?.75:0})
+}
+applyCosmetics();
+
+const obstacles=[],obstacleMat=new THREE.MeshStandardMaterial({color:0x5b3422,roughness:1});
+function resetObstacle(o,z=-85-Math.random()*35){o.userData.lane=Math.floor(Math.random()*3);o.position.x=lanes[o.userData.lane];o.position.z=z;const h=.45+Math.random()*.55;o.scale.set(1,h,1);o.position.y=.35*h}
+for(let i=0;i<(mobile?7:10);i++){const o=new THREE.Mesh(new THREE.BoxGeometry(1.0,.7,.75),obstacleMat);resetObstacle(o,-18-i*13);world.add(o);obstacles.push(o)}
+const diamonds=[],diamondGeo=new THREE.OctahedronGeometry(.16,0),diamondMat=new THREE.MeshStandardMaterial({color:0x59ddff,emissive:0x0b789a,emissiveIntensity:1});
+for(let i=0;i<(mobile?4:6);i++){const c=new THREE.Mesh(diamondGeo,diamondMat);c.userData.lane=Math.floor(Math.random()*3);c.position.set(lanes[c.userData.lane],.65,-32-i*28);world.add(c);diamonds.push(c)}
+const stars=[],starGeo=new THREE.OctahedronGeometry(.13,0),starMat=new THREE.MeshStandardMaterial({color:0xffd96b,emissive:0x6f4e00,emissiveIntensity:.7});
+for(let i=0;i<(mobile?10:14);i++){const st=new THREE.Mesh(starGeo,starMat);st.userData.lane=Math.floor(Math.random()*3);st.position.set(lanes[st.userData.lane],.72,-14-i*10);world.add(st);stars.push(st)}
+
+const shelter=new THREE.Group(),smat=new THREE.MeshStandardMaterial({color:0x4c5147,roughness:1});
+const shBase=new THREE.Mesh(new THREE.BoxGeometry(3.1,.25,2.7),smat);shBase.position.y=.12;shelter.add(shBase);
+[-1.25,1.25].forEach(x=>{const w=new THREE.Mesh(new THREE.BoxGeometry(.28,2.2,2.4),smat);w.position.set(x,1.15,0);shelter.add(w)});
+const roof=new THREE.Mesh(new THREE.ConeGeometry(2.1,1.1,4),new THREE.MeshStandardMaterial({color:0x394034,roughness:1}));roof.rotation.y=Math.PI/4;roof.position.y=2.6;shelter.add(roof);
+const sign=new THREE.Mesh(new THREE.BoxGeometry(1.2,.45,.12),new THREE.MeshStandardMaterial({color:0x7a5b31}));sign.position.set(-1.7,1.1,.9);shelter.add(sign);
+shelter.position.set(6,0,-120);world.add(shelter);
+
+let running=false,paused=false,shelterActive=false,shelterUsed=false,shelterTimer=0,timePenalty=0,runTime=0,lane=1,targetX=0,jumpY=0,jumpV=0,slideTimer=0;
+let dist=0,diamondsRun=0,starsRun=0,life=3,shieldCharges=3,chaserTimer=0,hitCooldown=0,last=performance.now(),runEnded=false;
+let speed=mobile?22.5:18.5;const routeMax=14000;
+const scoreNow=()=>Math.floor(dist)+starsRun*25;
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),1200)};
+const beep=(f=440,d=.05)=>{if(!state.settings.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;beep.ctx ||= new C();const o=beep.ctx.createOscillator(),g=beep.ctx.createGain();o.frequency.value=f;g.gain.value=.025;o.connect(g);g.connect(beep.ctx.destination);o.start();o.stop(beep.ctx.currentTime+d)}catch(e){}};
+const setLane=n=>{lane=Math.max(0,Math.min(2,n));targetX=lanes[lane]}, jump=()=>{if(jumpY<.03&&slideTimer<=0)jumpV=7.1}, slide=()=>{if(jumpY<.05)slideTimer=.62};
+function animateRunner(r,t,scale=1){const u=r.userData;if(!u)return;const s=Math.sin(t);u.armL.rotation.x=s*.95*scale;u.armR.rotation.x=-s*.95*scale;u.legL.rotation.x=-s*.82*scale;u.legR.rotation.x=s*.82*scale;u.hip.rotation.z=Math.sin(t*.5)*.025;u.headPivot.rotation.y=Math.sin(t*.33)*.05}
+function collideX(obj,range=.62){return Math.abs(obj.position.x-player.position.x)<range}
+function hit(){
+ if(hitCooldown>0)return;hitCooldown=1.15;
+ if(shieldCharges>0){shieldCharges--;toast('🛡 ESCUDO PROTEGEU VAREK');beep(620,.08);chaserTimer=2.2;hunter.visible=true;return}
+ life--;chaserTimer=4.2;hunter.visible=true;toast(life>0?'CAÇADORA SE APROXIMOU':'VAREK FOI CAPTURADO');beep(90,.12);if(life<=0)endRun('FIM DA FUGA')
+}
+function updateHud(){ $('#distTxt').textContent=Math.floor(dist)+' m';$('#starTxt').textContent=starsRun;$('#coinTxt').textContent=diamondsRun;$('#scoreTxt').textContent=fmt(scoreNow());$('#lifeTxt').textContent='❤'.repeat(Math.max(0,life))+'♡'.repeat(Math.max(0,3-life));$('#shieldTxt').textContent='ESCUDO '+shieldCharges;$('#routeTxt').textContent=(dist/1000).toFixed(1).replace('.',',')+' / 14,0 km';$('#routeBar').style.width=Math.min(100,dist/routeMax*100)+'%'}
+function refreshMenu(){ $('#menuWallet').textContent='💎 '+fmt(state.wallet);$('#menuStars').textContent='⭐ '+fmt(state.starsBank);$('#menuXp').textContent=fmt(state.xp)+' XP';$('#shopWallet').textContent='💎 '+fmt(state.wallet);$('#shopStatus').textContent='Saldo atual: 💎 '+fmt(state.wallet);$('#profileName').value=state.profile.name||'';$('#profileCountry').value=state.profile.country||'Brasil';$('#profileId').textContent=state.profile.id;renderShop();renderInventory();renderRank();updateSettingsUI()}
+function resetGame(){dist=0;diamondsRun=0;starsRun=0;life=3;shieldCharges=state.upgrades.shield;speed=mobile?22.5:18.5;lane=1;targetX=0;jumpY=0;jumpV=0;slideTimer=0;chaserTimer=0;hitCooldown=0;runTime=0;timePenalty=0;runEnded=false;shelterActive=false;shelterUsed=false;shelter.position.z=-120;hunter.visible=false;player.position.x=0;obstacles.forEach((o,i)=>resetObstacle(o,-18-i*13));diamonds.forEach((c,i)=>{c.userData.lane=Math.floor(Math.random()*3);c.position.set(lanes[c.userData.lane],.65,-32-i*28);c.visible=true});stars.forEach((st,i)=>{st.userData.lane=Math.floor(Math.random()*3);st.position.set(lanes[st.userData.lane],.72,-14-i*10);st.visible=true});$('#shelterPrompt').classList.remove('show');$('#shelterOverlay').classList.remove('show');updateHud()}
+function startRun(){resetGame();running=true;paused=false;$('#menuPanel').style.display='none';$$('.overlay').forEach(x=>x.classList.remove('show'));last=performance.now();toast('CORRA!')}
+function goMenu(){running=false;paused=false;shelterActive=false;$('#menuPanel').style.display='block';$$('.overlay').forEach(x=>x.classList.remove('show'));$('#shelterPrompt').classList.remove('show');refreshMenu()}
+function endRun(title='FIM DA FUGA'){if(runEnded)return;runEnded=true;running=false;paused=true;const score=scoreNow(),totalTime=runTime+timePenalty,xpGain=Math.max(1,Math.floor(score/100*(1+state.upgrades.xp*.25)));state.xp+=xpGain;state.records.push({score,distance:Math.floor(dist),stars:starsRun,time:Math.floor(totalTime),date:Date.now(),name:state.profile.name||'Jogador'});state.records.sort((a,b)=>b.score-a.score||a.time-b.time);state.records=state.records.slice(0,10);save();$('#resultTitle').textContent=title;$('#resultDist').textContent=Math.floor(dist)+' m';$('#resultStars').textContent=starsRun;$('#resultScore').textContent=fmt(score);$('#resultTime').textContent=fmtTime(totalTime);$('#resultCoins').textContent=diamondsRun;$('#resultXp').textContent='+'+fmt(xpGain);$('#resultOverlay').classList.add('show');refreshMenu()}
+function enterShelter(){if(state.wallet<100){toast('DIAMANTES INSUFICIENTES');return}state.wallet-=100;save();shelterActive=true;shelterTimer=30;timePenalty+=60;hunter.visible=false;chaserTimer=0;$('#shelterPrompt').classList.remove('show');$('#shelterOverlay').classList.add('show');refreshMenu();beep(520,.08)}
+function leaveShelter(){shelterActive=false;shelterUsed=true;shelter.position.z=-145-Math.random()*45;$('#shelterOverlay').classList.remove('show');last=performance.now();toast('DE VOLTA À CORRIDA')}
+function unlockAndEquip(id){const item=itemById(id);if(!item)return;if(!state.owned.includes(id))state.owned.push(id);state.equipped[item.type]=id;applyCosmetics()}
+function buyOrEquip(id){const item=itemById(id);if(!item)return;if(!state.owned.includes(id)){if(state.wallet<item.price){toast('SALDO INSUFICIENTE');return}state.wallet-=item.price;state.owned.push(id);toast('ITEM COMPRADO');save()}else{state.equipped[item.type]=id;applyCosmetics();toast('ITEM EQUIPADO');save()}refreshMenu()}
+function buyPackage(id){const p=packages.find(x=>x.id===id);if(!p)return;if(state.wallet<p.price){toast('SALDO INSUFICIENTE');return}state.wallet-=p.price;p.apply();save();applyCosmetics();refreshMenu();toast('PACOTE LIBERADO')}
+function renderShop(){const tabs=$('#shopTabs');tabs.innerHTML='';Object.entries(catLabels).forEach(([k,v])=>{const b=document.createElement('button');b.className='tab'+(activeCat===k?' active':'');b.textContent=v;b.onclick=()=>{activeCat=k;renderShop()};tabs.appendChild(b)});const grid=$('#shopGrid');grid.innerHTML='';shopItems.filter(x=>x.cat===activeCat).forEach(it=>{const owned=state.owned.includes(it.id),eq=state.equipped[it.type]===it.id,row=document.createElement('div');row.className='shopItem';row.innerHTML='<div><b>'+it.name+'</b><small>'+ (owned?'ADQUIRIDO':'💎 '+fmt(it.price)) +'</small></div><button class="action '+(eq?'equipped':'')+'">'+(eq?'✓ EQUIPADO':owned?'EQUIPAR':'COMPRAR • 💎 '+fmt(it.price))+'</button>';row.querySelector('button').onclick=()=>buyOrEquip(it.id);grid.appendChild(row)});const pg=$('#packageGrid');pg.innerHTML='';packages.forEach(p=>{const row=document.createElement('div');row.className='shopItem';row.innerHTML='<div><b>'+p.name+'</b><small>'+p.desc+'</small></div><button class="action">COMPRAR • 💎 '+fmt(p.price)+'</button>';row.querySelector('button').onclick=()=>buyPackage(p.id);pg.appendChild(row)})}
+function renderInventory(){const g=$('#inventoryGrid');g.innerHTML='';if(!state.owned.length)g.innerHTML='<p>Nenhum cosmético adquirido.</p>';state.owned.forEach(id=>{const it=itemById(id);if(!it)return;const eq=state.equipped[it.type]===id,row=document.createElement('div');row.className='invItem';row.innerHTML='<div><b>'+it.name+'</b><small>'+it.type.toUpperCase()+'</small></div><button class="action '+(eq?'equipped':'')+'">'+(eq?'✓ EQUIPADO':'EQUIPAR')+'</button>';row.querySelector('button').onclick=()=>{state.equipped[it.type]=id;save();applyCosmetics();renderInventory();renderShop();toast('EQUIPADO')};g.appendChild(row)});const cons=document.createElement('div');cons.className='invItem';cons.innerHTML='<div><b>Consumíveis</b><small>Escudos: '+state.consumables.shield+' • Ímã: '+state.consumables.magnetMin+' min • Cantis: '+state.consumables.canteen+'</small></div><span></span>';g.appendChild(cons)}
+function renderRank(){const g=$('#rankList');g.innerHTML='';if(!state.records.length){g.innerHTML='<p>Complete uma corrida para criar seu primeiro registro.</p>';return}state.records.forEach((r,i)=>{const row=document.createElement('div');row.className='rankRow';row.innerHTML='<div class="rankPos">#'+(i+1)+'</div><div><b>'+r.name+'</b><small>'+r.distance+' m • ⭐ '+r.stars+' • '+fmtTime(r.time)+'</small></div><div><b>'+fmt(r.score)+'</b><small>pontos</small></div>';g.appendChild(row)})}
+function updateSettingsUI(){$('#soundToggle').textContent=state.settings.sound?'LIGADO':'DESLIGADO';$('#effectsToggle').textContent=state.settings.reduced?'LIGADO':'DESLIGADO'}
+
+let trailHistory=Array.from({length:10},()=>new THREE.Vector3());
+function step(now){
+ requestAnimationFrame(step);const dt=Math.min(.034,(now-last)/1000||0);last=now;
+ if(!paused&&!shelterActive){camera.position.x=THREE.MathUtils.lerp(camera.position.x,player.position.x*.78,.10);camera.lookAt(player.position.x*.82,1.2,-7.8)}
+ if(shelterActive){shelterTimer=Math.max(0,shelterTimer-dt);$('#shelterTimerTxt').textContent=Math.ceil(shelterTimer);animateRunner(player,now*.006,.25);if(shelterTimer<=0)leaveShelter();renderer.render(scene,camera);return}
+ if(running&&!paused){
+   runTime+=dt;dist+=speed*dt;speed=Math.min(mobile?31:25,speed+dt*(mobile?.30:.19));hitCooldown=Math.max(0,hitCooldown-dt);slideTimer=Math.max(0,slideTimer-dt);
+   player.position.x+=(targetX-player.position.x)*Math.min(1,dt*12);jumpV-=19.5*dt;jumpY+=jumpV*dt;if(jumpY<0){jumpY=0;jumpV=0}player.position.y=jumpY-(slideTimer>0?.16:0);
+   const gait=now*.001*(mobile?14.5:12.2)*(speed/(mobile?22.5:18.5));animateRunner(player,gait,slideTimer>0?.35:1);player.rotation.z=(targetX-player.position.x)*-.08;
+   const worldMove=speed*dt;markers.forEach(m=>{m.position.z+=worldMove;if(m.position.z>8)m.position.z-=190});sideProps.forEach(t=>{t.position.z+=worldMove*.94;if(t.position.z>14)t.position.z-=250});
+   obstacles.forEach(o=>{o.position.z+=worldMove;if(o.position.z>8)resetObstacle(o);if(o.position.z>1.45&&o.position.z<2.9&&jumpY<.48&&slideTimer<=0&&collideX(o)){hit();resetObstacle(o)}});
+   const magnet=.62+state.upgrades.magnet*.22;
+   diamonds.forEach(c=>{c.position.z+=worldMove;c.rotation.y+=dt*3.4;c.rotation.x+=dt*1.2;if(c.position.z>8){c.userData.lane=Math.floor(Math.random()*3);c.position.set(lanes[c.userData.lane],.65,-115-Math.random()*80);c.visible=true}if(c.visible&&c.position.z>1.0&&c.position.z<3.4&&collideX(c,magnet)){c.visible=false;diamondsRun++;state.wallet++;save();beep(760,.04);toast('+1 DIAMANTE')}});
+   stars.forEach(st=>{st.position.z+=worldMove;st.rotation.y-=dt*3.1;if(st.position.z>8){st.userData.lane=Math.floor(Math.random()*3);st.position.set(lanes[st.userData.lane],.72,-100-Math.random()*55);st.visible=true}if(st.visible&&st.position.z>1.3&&st.position.z<2.8&&collideX(st)){st.visible=false;starsRun++;state.starsBank++;save();beep(980,.04);toast('+1 ESTRELA • +25 PONTOS')}});
+   shelter.position.z+=worldMove;if(shelter.position.z>12){shelter.position.z=-135-Math.random()*55;shelterUsed=false}
+   if(!shelterUsed&&shelter.position.z>-.5&&shelter.position.z<6)$('#shelterPrompt').classList.add('show');else $('#shelterPrompt').classList.remove('show');
+   if(chaserTimer>0){chaserTimer-=dt;hunter.visible=true;hunter.position.z=5.1-(1-Math.max(0,chaserTimer)/4.2)*.45;hunter.position.x+=(player.position.x-hunter.position.x)*Math.min(1,dt*4);animateRunner(hunter,gait*1.04,1.05)}else hunter.visible=false;
+   const tr=itemById(state.equipped.trail);if(tr){trailHistory.unshift(player.position.clone());trailHistory=trailHistory.slice(0,10);trails.forEach((q,i)=>{q.position.copy(trailHistory[Math.min(i,trailHistory.length-1)]);q.position.z+=.45+i*.22;q.position.y=.12;q.material.opacity=.7*(1-i/10)})}
+   updateHud();if(dist>=routeMax)endRun('FRONTEIRA ALCANÇADA')
+ }
+ renderer.render(scene,camera)
+}
+function resize(){const r=$('#gameScreen').getBoundingClientRect();camera.aspect=r.width/Math.max(1,r.height);camera.updateProjectionMatrix();renderer.setSize(r.width,r.height,false)}addEventListener('resize',resize);resize();
+
+addEventListener('keydown',e=>{if(e.key==='ArrowLeft')setLane(lane-1);if(e.key==='ArrowRight')setLane(lane+1);if(e.key==='ArrowUp'||e.code==='Space')jump();if(e.key==='ArrowDown')slide();if(e.key==='Escape'&&running){paused=!paused;$('#pauseOverlay').classList.toggle('show',paused)}});
+let gesture=null;canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse')return;gesture={id:e.pointerId,x:e.clientX,y:e.clientY,fired:false};try{canvas.setPointerCapture(e.pointerId)}catch(_){}});canvas.addEventListener('pointermove',e=>{if(!gesture||gesture.id!==e.pointerId||gesture.fired)return;const dx=e.clientX-gesture.x,dy=e.clientY-gesture.y;if(Math.max(Math.abs(dx),Math.abs(dy))>=12){gesture.fired=true;if(Math.abs(dx)>Math.abs(dy))setLane(lane+(dx>0?1:-1));else if(dy<0)jump();else slide()}});canvas.addEventListener('pointerup',()=>gesture=null);canvas.addEventListener('pointercancel',()=>gesture=null);
+
+$('#startBtn').onclick=startRun;$('#pauseBtn').onclick=()=>{if(!running||shelterActive)return;paused=true;$('#pauseOverlay').classList.add('show')};$('#resumeBtn').onclick=()=>{paused=false;$('#pauseOverlay').classList.remove('show');last=performance.now()};$('#restartBtn').onclick=startRun;$('#menuBtnPause').onclick=goMenu;$('#playAgainBtn').onclick=startRun;$('#resultMenuBtn').onclick=goMenu;$('#helpBtn').onclick=()=>$('#helpOverlay').classList.add('show');
+$$('[data-open]').forEach(b=>b.onclick=()=>{refreshMenu();$('#'+b.dataset.open).classList.add('show')});$$('[data-close]').forEach(b=>b.onclick=()=>$('#'+b.dataset.close).classList.remove('show'));
+$('#saveProfileBtn').onclick=()=>{state.profile.name=$('#profileName').value.trim();state.profile.country=$('#profileCountry').value.trim()||'Brasil';save();refreshMenu();toast('PERFIL SALVO')};
+$('#loginFutureBtn').onclick=()=>toast('LOGIN ONLINE SERÁ ATIVADO NA ETAPA DE BACKEND');$('#syncFutureBtn').onclick=()=>toast('SINCRONIZAÇÃO ONLINE AINDA NÃO ATIVA');
+$('#soundToggle').onclick=()=>{state.settings.sound=!state.settings.sound;save();updateSettingsUI()};$('#effectsToggle').onclick=()=>{state.settings.reduced=!state.settings.reduced;save();updateSettingsUI()};
+$('#enterShelterBtn').onclick=enterShelter;$('#ignoreShelterBtn').onclick=()=>{shelterUsed=true;$('#shelterPrompt').classList.remove('show')};$('#leaveShelterBtn').onclick=leaveShelter;
+$('#storyPreviewBtn').onclick=()=>toast('PRÉVIA: VAREK CORRE PARA A FRONTEIRA — A HISTÓRIA CONTINUA');
+
+refreshMenu();resetGame();requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
