@@ -1,0 +1,9 @@
+MAX REALMS — TESTE 12 — WORLD + SYSTEMS
+
+COMO TESTAR
+1. Descompacte o ZIP.
+2. Abra a pasta MAX-REALMS-TESTE-12-WORLD-SYSTEMS.
+3. Dê dois cliques em index.html.
+4. É necessário estar conectado à internet para carregar o Three.js nesta build.
+
+Esta versão é uma build de validação de sistemas: menu, estrelas/ranking, diamantes persistentes, abrigo, upgrades, perfil, loja, inventário e controles 1 gesto = 1 ação.
